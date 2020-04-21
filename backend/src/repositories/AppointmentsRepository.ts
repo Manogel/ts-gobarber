@@ -14,5 +14,4 @@ class AppointmentsRepository extends Repository<Appointment> {
     return findAppointment || null;
   }
 }
-
 export default AppointmentsRepository;
