@@ -21,6 +21,14 @@ export default createGlobalStyle`
     font-size: 16px;
   }
 
+  input {
+    color: #f4ede8;
+
+    &::placeholder {
+      color: #666360;
+    }
+  }
+
   h1, h2, h3, h4, h5, h6, strong {
     font-weight: 500;
   }
@@ -31,6 +39,7 @@ export default createGlobalStyle`
 
   a {
     text-decoration: none;
+    color: #fff;
   }
 
   `;
