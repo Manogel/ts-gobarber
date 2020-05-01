@@ -43,7 +43,7 @@ const SignIn: React.FC = () => {
           }}
           keyboardShouldPersistTaps="handled"
         >
-          <Form onSubmit={handleSignIn}>
+          <Form onSubmit={handleSignIn} ref={formRef}>
             <Container>
               <Image source={logoimg} />
               <View>
