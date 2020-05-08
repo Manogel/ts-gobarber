@@ -5,6 +5,7 @@ import fs from 'fs';
 import uploadConfig from '@config/upload';
 import AppError from '@shared/errors/AppError';
 import IUsersRepository from '../repositories/IUsersRepository';
+import IStorageProvider from '@shared/container/providers/StorageProvider/models/IStorageProvider';
 
 interface Request {
   user_id: string;
@@ -16,6 +17,9 @@ class UpdateUserAvatarService {
   constructor(
     @inject('UsersRepository')
     private usersRepository: IUsersRepository,
+
+    @inject('StorageProvider')
+    private storageProvider: IStorageProvider,
   ) {}
 
   public async execute(data: Request): Promise<User> {
@@ -28,16 +32,12 @@ class UpdateUserAvatarService {
     }
 
     if (user.avatar) {
-      const userAvatarFilePath = path.join(uploadConfig.directory, user.avatar);
-
-      const userAvatarFileExistis = await fs.promises.stat(userAvatarFilePath);
-
-      if (userAvatarFileExistis) {
-        await fs.promises.unlink(userAvatarFilePath);
-      }
+      this.storageProvider.deleteFile(user.avatar);
     }
 
-    user.avatar = avatar_filename;
+    const filename = await this.storageProvider.saveFile(avatar_filename);
+
+    user.avatar = filename;
 
     await this.usersRepository.save(user);
 
