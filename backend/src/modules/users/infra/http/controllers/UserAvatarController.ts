@@ -1,3 +1,4 @@
+import { Request, Response } from 'express';
 import UpdateUserAvatarService from '@modules/users/services/UpdateUserAvatarService';
 import { container } from 'tsyringe';
 
@@ -10,7 +11,7 @@ class UserAvatarController {
       avatar_filename: request.file.filename,
     });
 
-    response.json(user);
+    return response.json(user);
   }
 }
 
