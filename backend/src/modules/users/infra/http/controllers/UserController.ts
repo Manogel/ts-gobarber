@@ -4,7 +4,7 @@ import { container } from 'tsyringe';
 
 class UserController {
   public async store(request: Request, response: Response): Promise<Response> {
-    const { name, email, password } = request.body;
+    const { name, email, password, provider = false } = request.body;
 
     const createUser = container.resolve(CreateUserService);
 
@@ -12,6 +12,7 @@ class UserController {
       name,
       email,
       password,
+      provider,
     });
 
     delete user.password;
