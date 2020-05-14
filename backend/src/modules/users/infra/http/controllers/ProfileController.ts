@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import UpdateProfileService from '@modules/users/services/UpdateProfileService';
 import { container } from 'tsyringe';
+import { classToClass } from 'class-transformer';
 import ShowProfileService from '@modules/users/services/ShowProfileService';
 
 class ProfileController {
@@ -34,7 +35,7 @@ class ProfileController {
 
     delete user.password;
 
-    return response.json(user);
+    return response.json(classToClass(user));
   }
 }
 
