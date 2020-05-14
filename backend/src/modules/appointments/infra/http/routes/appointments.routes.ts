@@ -1,7 +1,8 @@
 import { Router } from 'express';
 
 import authMiddleware from '@modules/users/infra/http/middlewares/auth';
-import AppointmentController from '../controllers/AppointmentController';
+import appointmentController from '../controllers/AppointmentController';
+import providerAppointmentController from '../controllers/ProviderAppointmentsController';
 
 const appointmentsRouter = Router();
 
@@ -12,6 +13,7 @@ appointmentsRouter.use(authMiddleware);
 //   return res.json(appointments);
 // });
 
-appointmentsRouter.post('/', AppointmentController.store);
+appointmentsRouter.post('/', appointmentController.store);
+appointmentsRouter.get('/me', providerAppointmentController.index);
 
 export default appointmentsRouter;
