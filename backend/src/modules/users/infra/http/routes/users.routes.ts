@@ -15,6 +15,9 @@ usersRouter.post(
     [Segments.BODY]: {
       name: Joi.string().required(),
       email: Joi.string().email().required(),
+      provider: Joi.boolean(),
+      password: Joi.string(),
+      password_confirmation: Joi.string().valid(Joi.ref('password')),
     },
   }),
   UserController.store,
