@@ -1,12 +1,33 @@
 import React from 'react';
 
-// import { Container } from './styles';
+import { FiPower } from 'react-icons/fi';
+import { Container, Header, HeaderContent, Profile } from './styles';
+import logoimg from '../../assets/logo.svg';
+import { useAuth } from '../../hooks/Auth';
 
 const Dashboard: React.FC = () => {
+  const { signOut, user } = useAuth();
+
   return (
-    <div>
-      <h1>Dashboard</h1>
-    </div>
+    <Container>
+      <Header>
+        <HeaderContent>
+          <img src={logoimg} alt="GoBarber" />
+
+          <Profile>
+            <img src={user.avatar_url} alt={user.name} />
+            <div>
+              <span>Bem vindo,</span>
+              <strong>{user.name}</strong>
+            </div>
+          </Profile>
+
+          <button type="button" onClick={signOut}>
+            <FiPower />
+          </button>
+        </HeaderContent>
+      </Header>
+    </Container>
   );
 };
 
