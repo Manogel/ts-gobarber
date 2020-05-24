@@ -1,32 +1,95 @@
-import React from 'react';
+import React, { useState } from 'react';
 
-import { FiPower } from 'react-icons/fi';
-import { Container, Header, HeaderContent, Profile } from './styles';
-import logoimg from '../../assets/logo.svg';
-import { useAuth } from '../../hooks/Auth';
+import { FiClock } from 'react-icons/fi';
+import {
+  Container,
+  Content,
+  Schedule,
+  NextAppointment,
+  Section,
+  Appointment,
+  Calendar,
+} from './styles';
+import Header from '../../components/Header';
 
 const Dashboard: React.FC = () => {
-  const { signOut, user } = useAuth();
+  const [selectedDate, setSelectedDate] = useState(new Date());
 
   return (
     <Container>
-      <Header>
-        <HeaderContent>
-          <img src={logoimg} alt="GoBarber" />
+      <Header />
+      <Content>
+        <Schedule>
+          <h1>Horários agendados</h1>
+          <p>
+            <span>Hoje</span>
+            <span>Dia 06</span>
+            <span>Segunda-feira</span>
+          </p>
 
-          <Profile>
-            <img src={user.avatar_url} alt={user.name} />
+          <NextAppointment>
+            <strong>Atendimento a seguir</strong>
             <div>
-              <span>Bem vindo,</span>
-              <strong>{user.name}</strong>
+              <img
+                src="https://cdn.discordapp.com/avatars/473900543769837593/866025cf2440f1fe4b1764d835f85687.png?size=512"
+                alt="User"
+              />
+              <strong>Leonardo</strong>
+              <span>
+                <FiClock />
+                08:00
+              </span>
             </div>
-          </Profile>
+          </NextAppointment>
 
-          <button type="button" onClick={signOut}>
-            <FiPower />
-          </button>
-        </HeaderContent>
-      </Header>
+          <Section>
+            <strong>Manhã</strong>
+            <Appointment>
+              <span>
+                <FiClock />
+                08:00
+              </span>
+              <div>
+                <img
+                  src="https://cdn.discordapp.com/avatars/473900543769837593/866025cf2440f1fe4b1764d835f85687.png?size=512"
+                  alt="User"
+                />
+                <strong>Leonardo</strong>
+              </div>
+            </Appointment>
+            <Appointment>
+              <span>
+                <FiClock />
+                08:00
+              </span>
+              <div>
+                <img
+                  src="https://cdn.discordapp.com/avatars/473900543769837593/866025cf2440f1fe4b1764d835f85687.png?size=512"
+                  alt="User"
+                />
+                <strong>Leonardo</strong>
+              </div>
+            </Appointment>
+          </Section>
+          <Section>
+            <strong>Tarde</strong>
+            <Appointment>
+              <span>
+                <FiClock />
+                08:00
+              </span>
+              <div>
+                <img
+                  src="https://cdn.discordapp.com/avatars/473900543769837593/866025cf2440f1fe4b1764d835f85687.png?size=512"
+                  alt="User"
+                />
+                <strong>Leonardo</strong>
+              </div>
+            </Appointment>
+          </Section>
+        </Schedule>
+        <Calendar />
+      </Content>
     </Container>
   );
 };
