@@ -5,6 +5,7 @@ interface ContainerProps {
   isFocused: boolean;
   isFilled: boolean;
   isErrored: boolean;
+  name: string;
 }
 
 export const Container = styled.div<ContainerProps>`
