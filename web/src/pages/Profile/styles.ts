@@ -50,7 +50,7 @@ export const Content = styled.div`
       margin-top: 8px;
     }
 
-    div[name='old_password'] {
+    div[name='oldPassword'] {
       margin-top: 24px;
     }
   }

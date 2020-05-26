@@ -16,6 +16,8 @@ interface ProfileFormData {
   name: string;
   email: string;
   password: string;
+  oldPassword: string;
+  password_confirmation: string;
 }
 
 const Profile: React.FC = () => {
@@ -33,19 +35,56 @@ const Profile: React.FC = () => {
           email: Yup.string()
             .email('Informe um email válido')
             .required('E-mail obrigatório'),
-          password: Yup.string()
-            .min(6, 'No mínimo 6 digitos')
-            .required('Senha obrigatória'),
+          oldPassword: Yup.string(),
+          password: Yup.string().when('oldPassword', {
+            is: (val) => !!val.length,
+            then: Yup.string()
+              .required('Campo obrigatório')
+              .min(5, 'No mínimo 5 caracteres!'),
+            otherwise: Yup.string(),
+          }),
+          password_confirmation: Yup.string()
+            .when('oldPassword', {
+              is: (val) => !!val.length,
+              then: Yup.string()
+                .required('Campo obrigatório')
+                .min(5, 'No mínimo 5 caracteres!'),
+              otherwise: Yup.string(),
+            })
+            .oneOf([Yup.ref('password'), null], 'Confirmação incorreta'),
         });
 
         await schema.validate(data, { abortEarly: false });
 
-        await api.post('/users', data);
+        const {
+          name,
+          email,
+          password_confirmation,
+          password,
+          oldPassword,
+        } = data;
+
+        const formData = {
+          name,
+          email,
+          ...(oldPassword
+            ? {
+                password,
+                oldPassword,
+                password_confirmation,
+              }
+            : {}),
+        };
+
+        const response = await api.put('/profile', formData);
+
+        updateUser(response.data);
 
         addToast({
           type: 'success',
-          title: 'Cadastro realizado!',
-          description: 'Você já pode fazer seu login no GoBarber.',
+          title: 'Perfil atualizado!',
+          description:
+            'Suas informaçõe do perfil foram atualizadas com sucesso.',
         });
 
         history.push('/');
@@ -63,7 +102,7 @@ const Profile: React.FC = () => {
         });
       }
     },
-    [addToast, history],
+    [addToast, history, updateUser],
   );
 
   const handleAvatarChange = useCallback(
@@ -83,7 +122,7 @@ const Profile: React.FC = () => {
         });
       }
     },
-    [addToast],
+    [addToast, updateUser],
   );
 
   return (
@@ -118,8 +157,8 @@ const Profile: React.FC = () => {
           <Input icon={FiMail} name="email" placeholder="E-mail" />
           <Input
             icon={FiLock}
-            name="old_password"
-            placeholder="Senha"
+            name="oldPassword"
+            placeholder="Senha atual"
             type="password"
           />
 
