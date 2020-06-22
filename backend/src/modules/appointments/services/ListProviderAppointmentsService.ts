@@ -11,8 +11,6 @@ interface IRequest {
   day: number;
 }
 
-
-
 @injectable()
 class ListProviderAppointmentsService {
   constructor(
@@ -21,24 +19,31 @@ class ListProviderAppointmentsService {
 
     @inject('CacheProvider')
     private cacheProvider: ICacheProvider,
-    ) {}
+  ) {}
 
-    public async execute(data: IRequest): Promise<Appointment[]> {
-      const { provider_id, month, year, day } = data;
-      const cacheKey = `provider-appointments:${provider_id}:${year}-${month}-${day}`
+  public async execute(data: IRequest): Promise<Appointment[]> {
+    const { provider_id, month, year, day } = data;
+    const cacheKey = `provider-appointments:${provider_id}:${year}-${month}-${day}`;
 
-      let appointments = await this.cacheProvider.recover<Appointment[]>(cacheKey)
+    let appointments = await this.cacheProvider.recover<Appointment[]>(
+      cacheKey,
+    );
 
-      if(!appointments){
-        appointments = await this.appointmentsRepository.findAllInDayFromProvider({
-          provider_id, month, year, day
-        })
+    if (!appointments) {
+      appointments = await this.appointmentsRepository.findAllInDayFromProvider(
+        {
+          provider_id,
+          month,
+          year,
+          day,
+        },
+      );
 
-        await this.cacheProvider.save(cacheKey, classToClass(appointments))
-      }
-
-      return appointments;
+      await this.cacheProvider.save(cacheKey, classToClass(appointments));
     }
-  }
 
-  export default ListProviderAppointmentsService;
+    return appointments;
+  }
+}
+
+export default ListProviderAppointmentsService;

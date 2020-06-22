@@ -13,9 +13,12 @@
       "@config/*": ["config/*"],
       "@shared/*": ["shared/*"]
     },
+    "rootDirs": ["src"],
     "esModuleInterop": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
+    "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true
-  }
+  },
+  "include": ["./src/**/*.ts"]
 }

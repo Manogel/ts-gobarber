@@ -8,27 +8,34 @@ import React, {
 import AsyncStorage from '@react-native-community/async-storage';
 import api from '../services/api';
 
-interface AuthState {
-  token: string;
-  user: object;
+interface IUser {
+  id: number;
+  avatar_url: string;
+  name: string;
+  email: string;
 }
 
-interface SignInCredentials {
+interface IAuthState {
+  token: string;
+  user: IUser;
+}
+
+interface ISignInCredentials {
   email: string;
   password: string;
 }
 
-interface AuthContextData {
-  user: object;
+interface IAuthContextData {
+  user: IUser;
   loading: boolean;
-  signIn(credentials: SignInCredentials): Promise<void>;
+  signIn(credentials: ISignInCredentials): Promise<void>;
   signOut(): void;
 }
 
-const AuthContext = createContext<AuthContextData>({} as AuthContextData);
+const AuthContext = createContext<IAuthContextData>({} as IAuthContextData);
 
 export const AuthProvider: React.FC = ({ children }) => {
-  const [auth, setAuth] = useState<AuthState>({} as AuthState);
+  const [auth, setAuth] = useState<IAuthState>({} as IAuthState);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -39,6 +46,7 @@ export const AuthProvider: React.FC = ({ children }) => {
       ]);
 
       if (token[1] && user[1]) {
+        api.defaults.headers.authorization = `Bearer ${token[1]}`;
         setAuth({ token: token[1], user: JSON.parse(user[1]) });
       }
 
@@ -56,7 +64,7 @@ export const AuthProvider: React.FC = ({ children }) => {
       });
 
       const { token, user } = response.data;
-
+      api.defaults.headers.authorization = `Bearer ${token}`;
       await AsyncStorage.multiSet([
         ['@Gobarber:token', token],
         ['@Gobarber:user', JSON.stringify(user)],
@@ -70,7 +78,7 @@ export const AuthProvider: React.FC = ({ children }) => {
   const signOut = useCallback(async () => {
     await AsyncStorage.multiRemove(['@Gobarber:token', '@Gobarber:user']);
 
-    setAuth({} as AuthState);
+    setAuth({} as IAuthState);
   }, []);
 
   return (
@@ -80,7 +88,7 @@ export const AuthProvider: React.FC = ({ children }) => {
   );
 };
 
-export function useAuth(): AuthContextData {
+export function useAuth(): IAuthContextData {
   const context = useContext(AuthContext);
 
   if (!context) {
