@@ -20,7 +20,7 @@ import { Container, Title, BackToSignIn, BackToSignInText } from './styles';
 import logoimg from '../../assets/logo.png';
 import getValidationErrors from '../../utils/getValidationErrors';
 
-interface SignUpFormData {
+interface ISignUpFormData {
   name: string;
   email: string;
   password: string;
@@ -32,7 +32,7 @@ const SignUp: React.FC = () => {
   const emailInputRef = useRef<TextInput>(null);
   const passwordInputRef = useRef<TextInput>(null);
 
-  const handleSignUp = useCallback(async (data: SignUpFormData) => {
+  const handleSignUp = useCallback(async (data: ISignUpFormData) => {
     formRef.current?.setErrors({});
     try {
       const schema = Yup.object().shape({

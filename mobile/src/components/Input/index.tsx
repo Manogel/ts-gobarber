@@ -11,25 +11,26 @@ import { TextInputProps } from 'react-native';
 import { useField } from '@unform/core';
 import { Container, TextInput, Icon } from './styles';
 
-interface InputProps extends TextInputProps {
+interface IInputProps extends TextInputProps {
   name: string;
   icon: string;
+  containerStyle?: {};
 }
 
-interface InputValueReference {
+interface IInputValueReference {
   value: string;
 }
 
-interface InputRef {
+interface IInputRef {
   focus(): void;
 }
 
-const Input: React.RefForwardingComponent<InputRef, InputProps> = (
-  { name, icon, ...rest },
+const Input: React.RefForwardingComponent<IInputRef, IInputProps> = (
+  { name, icon, containerStyle = {}, ...rest },
   ref,
 ) => {
   const { registerField, defaultValue = '', fieldName, error } = useField(name);
-  const inputValueRef = useRef<InputValueReference>({ value: defaultValue });
+  const inputValueRef = useRef<IInputValueReference>({ value: defaultValue });
   const inputElementRef = useRef<any>(null);
   const [isFocused, setIsFocused] = useState(false);
   const [isFilled, setIsFilled] = useState(false);
@@ -45,7 +46,7 @@ const Input: React.RefForwardingComponent<InputRef, InputProps> = (
       name: fieldName,
       ref: inputValueRef.current,
       path: 'value',
-      setValue(ref: any, value) {
+      setValue(_: any, value) {
         inputValueRef.current.value = value;
         inputElementRef.current.setNativeProps({ text: value });
       },
@@ -67,7 +68,7 @@ const Input: React.RefForwardingComponent<InputRef, InputProps> = (
   }, []);
 
   return (
-    <Container isFocused={isFocused} isErrored={!!error}>
+    <Container style={containerStyle} isFocused={isFocused} isErrored={!!error}>
       <Icon
         color={isFocused || isFilled ? '#ff9000' : '#666360'}
         name={icon}
