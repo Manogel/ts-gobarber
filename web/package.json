@@ -46,6 +46,7 @@
     ]
   },
   "devDependencies": {
+    "@types/react-datepicker": "^3.0.2",
     "@types/react-router-dom": "^5.1.4",
     "@types/styled-components": "^5.1.0",
     "@types/yup": "^0.28.0",
